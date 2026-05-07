@@ -1,0 +1,8 @@
+.env
+calibration_data/
+logs/
+*.bag
+*.bag.active
+__pycache__/
+*.pyc
+.DS_Store

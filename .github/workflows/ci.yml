@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Shell syntax
+        run: bash -n scripts/calibration_capture.sh docker/calibration-capture/entrypoint.sh
+
+      - name: Python syntax
+        run: python3 -m py_compile docker/calibration-capture/livox_custom_to_pointcloud2.py
+
+      - name: Compose render
+        run: docker compose -f docker-compose.yml config >/tmp/lidar-camera-calibration-compose.yml
+
+      - name: Public release audit
+        run: ./scripts/calibration_capture.sh audit
